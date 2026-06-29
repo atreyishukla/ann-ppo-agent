@@ -1,0 +1,11 @@
+{
+  "name": "node-red-contrib-greenhouse-controller",
+  "version": "0.0.6",
+  "description": "Greenhouse ANN-lag dynamics + improved 4-state RL controller without final action override",
+  "node-red": {
+    "nodes": {
+      "greenhouse-controller": "greenhouse-controller.js"
+    }
+  },
+  "dependencies": {}
+}

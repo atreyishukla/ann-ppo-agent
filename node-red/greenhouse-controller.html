@@ -1,0 +1,46 @@
+<script type="text/javascript">
+  RED.nodes.registerType("greenhouse-controller", {
+    category: "greenhouse",
+    color: "#C7E9C0",
+    defaults: {
+      name: { value: "" },
+      projectPath: { value: "" },
+      pythonPath: { value: "python" },
+      controllerMode: { value: "rl" }
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: "font-awesome/fa-leaf",
+    label: function() {
+      return this.name || "greenhouse-controller";
+    }
+  });
+</script>
+
+<script type="text/html" data-template-name="greenhouse-controller">
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name">
+  </div>
+  <div class="form-row">
+    <label for="node-input-projectPath"><i class="fa fa-folder"></i> Project path</label>
+    <input type="text" id="node-input-projectPath" placeholder="/absolute/path/to/greenhouse-ml-controller">
+  </div>
+  <div class="form-row">
+    <label for="node-input-pythonPath"><i class="fa fa-code"></i> Python</label>
+    <input type="text" id="node-input-pythonPath" placeholder="python or /absolute/path/.venv/bin/python">
+  </div>
+  <div class="form-row">
+    <label for="node-input-controllerMode"><i class="fa fa-sliders"></i> Mode</label>
+    <select id="node-input-controllerMode">
+      <option value="supervised">supervised</option>
+      <option value="rl">rl</option>
+    </select>
+  </div>
+</script>
+
+<script type="text/html" data-help-name="greenhouse-controller">
+  <p>Runs the local greenhouse ML controller.</p>
+  <p>Use rl mode for the final 4-state controller. The RL agent is trained using the ANN-lag dynamics model.</p>
+  <p>Expected payload fields: Date_time, T_outside, T_inside, T_floor_inside, T_floor_outside, SR_direct_outside. RL output includes fan_on, fan_off, heater_on, heater_off, both_on, and both_off.</p>
+</script>

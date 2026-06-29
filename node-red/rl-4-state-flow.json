@@ -1,0 +1,169 @@
+[
+  {
+    "id": "f2c1c7b7b2201001",
+    "type": "tab",
+    "label": "Greenhouse 4-State RL Controller",
+    "disabled": false,
+    "info": "One-input flow: sensor data -> RL greenhouse controller -> fan/heater on/off decision."
+  },
+  {
+    "id": "a111111111111001",
+    "type": "inject",
+    "z": "f2c1c7b7b2201001",
+    "name": "Sensor input",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "{\"Date_time\":\"2026-01-15 07:00:00\",\"T_outside\":-18,\"T_inside\":12,\"T_floor_inside\":14,\"T_floor_outside\":-10,\"SR_direct_outside\":20,\"target_temp\":22,\"comfort_band\":1,\"allow_both_on\":false}",
+    "payloadType": "json",
+    "x": 160,
+    "y": 160,
+    "wires": [
+      [
+        "b222222222222001"
+      ]
+    ]
+  },
+  {
+    "id": "b222222222222001",
+    "type": "function",
+    "z": "f2c1c7b7b2201001",
+    "name": "Prepare RL input",
+    "func": "const previousAction = flow.get(\"gh_previous_action\") ?? 0;\n\nmsg.payload = {\n    ...msg.payload,\n    controller: \"rl\",\n    previous_action: previousAction,\n    target_temp: msg.payload.target_temp ?? 22,\n    comfort_band: msg.payload.comfort_band ?? 1,\n    allow_both_on: msg.payload.allow_both_on ?? false\n};\n\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 390,
+    "y": 160,
+    "wires": [
+      [
+        "c333333333333001"
+      ]
+    ]
+  },
+  {
+    "id": "c333333333333001",
+    "type": "greenhouse-controller",
+    "z": "f2c1c7b7b2201001",
+    "name": "RL Greenhouse Controller",
+    "projectPath": "/Users/atreyishukla/Desktop/temp-ml-controller",
+    "pythonPath": "/Users/atreyishukla/Desktop/temp-ml-controller/.venv/bin/python",
+    "controllerMode": "rl",
+    "x": 650,
+    "y": 160,
+    "wires": [
+      [
+        "d444444444444001"
+      ]
+    ]
+  },
+  {
+    "id": "d444444444444001",
+    "type": "function",
+    "z": "f2c1c7b7b2201001",
+    "name": "Save previous action",
+    "func": "if (typeof msg.payload.action_id === \"number\") {\n    flow.set(\"gh_previous_action\", msg.payload.action_id);\n}\n\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 920,
+    "y": 160,
+    "wires": [
+      [
+        "e555555555555001"
+      ]
+    ]
+  },
+  {
+    "id": "e555555555555001",
+    "type": "debug",
+    "z": "f2c1c7b7b2201001",
+    "name": "Final fan/heater decision",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1190,
+    "y": 160,
+    "wires": []
+  },
+  {
+    "id": "f666666666666001",
+    "type": "inject",
+    "z": "f2c1c7b7b2201001",
+    "name": "Reset RL memory",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "{}",
+    "payloadType": "json",
+    "x": 160,
+    "y": 260,
+    "wires": [
+      [
+        "g777777777777001"
+      ]
+    ]
+  },
+  {
+    "id": "g777777777777001",
+    "type": "function",
+    "z": "f2c1c7b7b2201001",
+    "name": "Clear previous action",
+    "func": "flow.set(\"gh_previous_action\", 0);\nmsg.payload = {\n    reset: true,\n    previous_action: 0\n};\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 400,
+    "y": 260,
+    "wires": [
+      [
+        "h888888888888001"
+      ]
+    ]
+  },
+  {
+    "id": "h888888888888001",
+    "type": "debug",
+    "z": "f2c1c7b7b2201001",
+    "name": "Reset output",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 640,
+    "y": 260,
+    "wires": []
+  }
+]

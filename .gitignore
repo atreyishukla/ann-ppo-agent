@@ -1,0 +1,51 @@
+# Python virtual environments
+.venv/
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+
+# macOS
+.DS_Store
+
+# VSCode
+.vscode/
+
+# Raw data files
+data/*.xlsx
+data/*.xls
+data/*.csv
+
+# Trained model files
+models/*.pt
+models/*.pth
+models/*.joblib
+models/*.pkl
+models/*.zip
+models/*.json
+
+# Logs and experiment outputs
+logs/
+runs/
+tensorboard/
+*.log
+
+# Node / Node-RED dependencies
+node_modules/
+npm-debug.log*
+package-lock.json
+
+# Node-RED local runtime files
+flows_*.json
+flows_*.json.backup
+.flows_*.json
+.flows_*.json.backup
+
+# Environment variables
+.env
